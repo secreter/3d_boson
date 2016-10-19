@@ -1,0 +1,177 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+
+section{
+	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	vertical-align: center;
+  	flex-wrap: wrap;
+  	flex-grow: 1;
+  	align-content: center;
+  	font-family: 'Open Sans', sans-serif;
+  	background: #222;
+  
+  	/*background: linear-gradient(top, #222, #333);*/
+  	/*background: -webkit-linear-gradient(top, #222, #333);*/
+}
+/*box-shadow 逗号隔开可以写多个阴影，会叠加；把扩展半径和模糊半径设为零，通过设置x y可以模拟设置四条边不同效果，其实是多个叠加
+属性分别为 insset x y 模糊半径 拉伸半径 颜色
+*/
+[class$="face"]{
+	width: 160px;
+	height: 160px;
+	background: #e7e7e7;
+	/*margin: 20px;*/
+	border-radius: 10%;
+	box-shadow: inset 0 5px #f2f2f2,
+				inset 0 -5px #bbb,
+				inset -5px 0 #d7d7d7,
+				inset 5px 0 #d7d7d7	
+				;
+	display: flex;	
+	padding: 20px
+}
+.flex_start{
+	align-self: flex-start;
+}
+.flex_end{
+	align-self: flex-end;
+}
+.center{
+	align-self: center;
+}
+.baseline{
+	align-self: baseline;
+}
+.stretch{
+	align-self: stretch;
+}
+.column{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	flex-grow: 1;
+	/*background-color: #890;*/
+	align-items: center;
+	/*border: solid 1px red;*/
+}
+.pip{
+	display: box;
+	width: 30px;
+	height: 30px;
+	background: #222;
+	border-radius: 50%;
+	box-shadow: inset 0 5px #000,inset 0 -5px #444;
+}
+.flex_grow_1{
+	flex-grow: 1;
+}
+.flex_grow_2{
+	flex-grow: 2;
+}
+.flex_grow_3{
+	flex-grow: 3;
+}
+.flex_grow_4{
+	flex-grow: 4;
+}
+.flex_grow_5{
+	flex-grow: 5;
+}
+.first_face{
+	align-items: center;
+	justify-content: center;
+}
+
+.second_face{
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-around;
+}
+.third_face{
+	align-items: center;
+	justify-content: center;
+}
+.forth_face{
+	flex-direction: row;
+
+}
+
+/*麻将*/
+[class$="dot"]{
+	height: 200px;
+	width: 160px;
+	background: #e7e7e7;
+	border-radius: 6%;
+	display: flex;
+	padding: 15px 10px;
+	box-shadow: inset 0 5px #f2f2f2,
+				inset 0 -2px #bbb,
+				inset -2px 0 #d7d7d7,
+				inset 5px 0 #d7d7d7	,
+				-1px -1px #fff,
+				-1px -2px #fff,
+				-1px -3px #fff,
+				-1px -4px #fff,
+				-1px -5px #fff,
+				-2px -6px #fff,
+				-2px -7px #fff,
+				-2px -8px #fff,
+				-2px -9px #fff,
+				-2px -10px #25b82c,
+				-3px -11px #25b82c,
+				-3px -12px #25b82c,
+				-3px -13px #25b82c,
+				-3px -14px #25b82c,
+				-3px -15px #25b82c,
+				-4px -15px #25b82c,
+				-4px -15px #25b82c,
+				-4px -15px #25b82c,
+				-4px -15px #25b82c
+				;
+}
+.one_dot{
+	justify-content: center;
+	align-items: center;
+}
+.one_dot .pip{
+	width: 80px;
+	height:80px;
+	box-shadow: inset -1px 5px #000,inset -1px -5px #444;
+}
+/*//-5px -20px #25b82c	*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>色子</title>
+	<link rel="stylesheet" type="text/css" href="css/boson.css">
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding:0;
+		}
+		html,body{
+			font-size: 80px;
+			width: 100%;
+			height: 100%;
+		}
+		.wrapper{
+			background-color: #222;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.cube{
+			width: 2rem;
+			height: 2rem;
+			background-color: #eee;
+
+			transform-style: preserve-3d;
+			transform: rotateX(-40deg) rotateY(32deg);
+
+			perspective: 1000px;
+		}
+		.side{
+			position: absolute;
+			width: 2rem;
+			height: 2rem;
+			background-color: rgba(255, 99, 71, 0.6);
+
+		}
+		.front {
+		  transform: translateZ(1em);
+		}
+		.top {
+		  transform: rotateX(90deg) translateZ(1em);
+		}
+		.right {
+    	transform: rotateY(90deg) translateZ(1em);
+		}
+		.left {
+    	transform: rotateY(-90deg) translateZ(1em);
+		}
+		.bottom {
+		  transform: rotateX(-90deg) translateZ(1em);
+		}
+
+		.back {
+		  transform: rotateY(-180deg) translateZ(1em);
+		}
+
+
+		.ctrl{
+			position: absolute;
+			left: 30px;
+			top: 20px;
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body>
+<div class="wrapper w2">
+  <div class="cube" id="mycube">
+      <div class="side  front">
+      <!-- 1 -->
+      	<div class="first_face">
+					<span class="pip"></span>
+				</div>
+      </div>
+      <div class="side   back">
+      <!-- 6 -->
+      	<div class="sixth_face">
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side  right">
+      <!-- 4 -->
+      	<div class="forth_face">
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side   left">
+      <!-- 3 -->
+      	<div class="third_face">
+					<span class="pip flex_start"></span>
+					<span class="pip"></span>
+					<span class="pip flex_end"></span>
+				</div>
+      </div>
+      <div class="side    top">
+      <!-- 5 -->
+      	<div class="fifth_face">
+					<div class="column">
+						<span class="pip flex_end"></span>
+						<span class="pip flex_end"></span>
+					</div>
+					<div class="column">
+						<span class="pip center"></span>
+					</div>
+					<div class="column">
+						<span class="pip flex_start"></span>
+						<span class="pip flex_start"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side bottom">
+      <!-- 2 -->
+      	<div class="second_face">
+					<span class="pip flex_start"></span>
+					<span class="pip flex_end"></span>
+				</div>
+      </div>
+  </div>
+</div>
+<div class="ctrl">
+	<input onchange="change(this)" type="range" id="ctrlBar" value="500" min="0" max="5000" >
+	<output id="result" for="ctrlBar"></output><br>
+	<input type="text" class="xNum" value="0"/>//X轴旋转角度   
+  <input type="text" class="yNum" value="0"/>//Y轴旋转角度 
+</div>
+</body>
+<script type="text/javascript">
+	var cube=document.getElementById('mycube')
+	var result=document.getElementById('result')
+	move()
+	function change(bar){
+		var val=bar.value
+		cube.style.perspective=val+'px'
+		result.value=val
+		console.log(val)
+	}
+	  function move(){   
+        var body = document.querySelector("body");   
+        var box = document.querySelector(".cube");   
+        var xNum =document.querySelector(".xNum");   
+        var yNum =document.querySelector(".yNum");   
+        var x = 0,y = 0,z = 0;   
+        var xx = 0,yy = 0;   
+        var xArr = [],yArr = [];   
+        window.onmousedown = function (e) {//鼠标按下事件   
+            body.style.cursor = 'url("2.jpg"),auto';   
+            xArr[0] = e.clientX/2;//获取鼠标点击屏幕时的坐标   
+            yArr[0] = e.clientY/2;   
+            window.onmousemove = function (e) {//鼠标移动事件————当鼠标按下且移动时触发   
+                xArr[1] = e.clientX/2;//获取鼠标移动时第一个点的坐标   
+                yArr[1] = e.clientY/2;   
+                yy += xArr[1] - xArr[0];//获得鼠标移动的距离   
+                xx += yArr[1] - yArr[0];   
+                xNum.value = xx+"°";//将所获得距离数字赋值给input显示旋转角度   
+                yNum.value = yy+"°";   
+                //将旋转角度写入transform中   
+                box.style.transform = "rotatex("+xx+"deg) rotatey("+yy+"deg) rotatez(0deg)scale3d(0.7,0.7,0.7)";   
+                xArr[0] = e.clientX/2;   
+                yArr[0] = e.clientY/2;   
+            }   
+  
+        };   
+        window.onmouseup = function () {//鼠标抬起事件————用于清除鼠标移动事件，   
+            body.style.cursor = 'url("2.jpg"),auto';   
+            window.onmousemove = null;   
+        }   
+    }   
+</script>
+</html>
