@@ -12,6 +12,8 @@
 			font-size: 80px;
 			width: 100%;
 			height: 100%;
+			display: flex;
+			flex-direction: column;
 		}
 		.wrapper{
 			background-color: #222;
@@ -35,39 +37,52 @@
 			position: absolute;
 			width: 2rem;
 			height: 2rem;
-			background-color: rgba(255, 99, 71, 0.6);
+			background-color: rgba(255, 99, 71, 0);
 
+			transition: 3s all ease;
 		}
 		.front {
-		  transform: translateZ(1em);
+		  transform: translateZ(1rem);
 		}
 		.top {
-		  transform: rotateX(90deg) translateZ(1em);
+		  transform: rotateX(90deg) translateZ(1rem);
 		}
 		.right {
-    	transform: rotateY(90deg) translateZ(1em);
+    	transform: rotateY(90deg) translateZ(1rem);
 		}
 		.left {
-    	transform: rotateY(-90deg) translateZ(1em);
+    	transform: rotateY(-90deg) translateZ(1rem);
 		}
 		.bottom {
-		  transform: rotateX(-90deg) translateZ(1em);
+		  transform: rotateX(-90deg) translateZ(1rem);
 		}
 
 		.back {
-		  transform: rotateY(-180deg) translateZ(1em);
+		  transform: rotateY(-180deg) translateZ(1rem);
 		}
 
 
 		.ctrl{
-			position: absolute;
-			left: 30px;
-			top: 20px;
+			/*position: absolute;*/
+			width: 100%;
+			/*left: 0px;
+			top: 0px;*/
+			padding: 20px 20px;
 			font-size: 16px;
+			background-color: #999;
 		}
 	</style>
 </head>
 <body>
+<div class="ctrl">
+	父元素perspective：<input onchange="change(this)" type="range" id="ctrlBar" value="10000" min="0" max="10000" >
+	<output id="result" for="ctrlBar">10000</output>px<br>
+	X轴旋转角度  <input type="text" class="xNum" value="0"/> 
+  Y轴旋转角度 <input type="text" class="yNum" value="0"/>
+  <button onclick="toggleCube()">展开/合起</button>
+  <button onclick="makeCube()">只选择不平移</button>
+  <button onclick="makeCube()">原理</button>
+</div>
 <div class="wrapper w2">
   <div class="cube" id="mycube">
       <div class="side  front">
@@ -137,16 +152,15 @@
       </div>
   </div>
 </div>
-<div class="ctrl">
-	<input onchange="change(this)" type="range" id="ctrlBar" value="500" min="0" max="5000" >
-	<output id="result" for="ctrlBar"></output><br>
-	<input type="text" class="xNum" value="0"/>//X轴旋转角度   
-  <input type="text" class="yNum" value="0"/>//Y轴旋转角度 
-</div>
+
 </body>
 <script type="text/javascript">
 	var cube=document.getElementById('mycube')
 	var result=document.getElementById('result')
+	var degArr=['','rotateY(-180deg)','rotateY(90deg)','rotateY(-90deg)','rotateX(90deg)','rotateX(-90deg)']
+  var sidesArr=document.querySelectorAll('.side')
+	var isOpen=false
+	var isMake=true
 	move()
 	function change(bar){
 		var val=bar.value
@@ -154,36 +168,58 @@
 		result.value=val
 		console.log(val)
 	}
-	  function move(){   
-        var body = document.querySelector("body");   
-        var box = document.querySelector(".cube");   
-        var xNum =document.querySelector(".xNum");   
-        var yNum =document.querySelector(".yNum");   
-        var x = 0,y = 0,z = 0;   
-        var xx = 0,yy = 0;   
-        var xArr = [],yArr = [];   
-        window.onmousedown = function (e) {//鼠标按下事件   
-            body.style.cursor = 'url("2.jpg"),auto';   
-            xArr[0] = e.clientX/2;//获取鼠标点击屏幕时的坐标   
+  function move(){   
+    var wrapper = document.querySelector(".wrapper");   
+    var box = document.querySelector(".cube");   
+    var xNum =document.querySelector(".xNum");   
+    var yNum =document.querySelector(".yNum");   
+    var x = 0,y = 0,z = 0;   
+    var xx = 0,yy = 0;   
+    var xArr = [],yArr = [];   
+    wrapper.onmousedown = function (e) {//鼠标按下事件   
+        wrapper.style.cursor = 'url("2.jpg"),auto';   
+        xArr[0] = e.clientX/2;//获取鼠标点击屏幕时的坐标   
+        yArr[0] = e.clientY/2;   
+        wrapper.onmousemove = function (e) {//鼠标移动事件————当鼠标按下且移动时触发   
+            xArr[1] = e.clientX/2;//获取鼠标移动时第一个点的坐标   
+            yArr[1] = e.clientY/2;   
+            yy += xArr[1] - xArr[0];//获得鼠标移动的距离   
+            xx += yArr[1] - yArr[0];   
+            xNum.value = xx+"°";//将所获得距离数字赋值给input显示旋转角度   
+            yNum.value = yy+"°";   
+            //将旋转角度写入transform中   
+            box.style.transform = "rotatex("+xx+"deg) rotatey("+yy+"deg) rotatez(0deg)scale3d(1,1,1)";   
+            xArr[0] = e.clientX/2;   
             yArr[0] = e.clientY/2;   
-            window.onmousemove = function (e) {//鼠标移动事件————当鼠标按下且移动时触发   
-                xArr[1] = e.clientX/2;//获取鼠标移动时第一个点的坐标   
-                yArr[1] = e.clientY/2;   
-                yy += xArr[1] - xArr[0];//获得鼠标移动的距离   
-                xx += yArr[1] - yArr[0];   
-                xNum.value = xx+"°";//将所获得距离数字赋值给input显示旋转角度   
-                yNum.value = yy+"°";   
-                //将旋转角度写入transform中   
-                box.style.transform = "rotatex("+xx+"deg) rotatey("+yy+"deg) rotatez(0deg)scale3d(0.7,0.7,0.7)";   
-                xArr[0] = e.clientX/2;   
-                yArr[0] = e.clientY/2;   
-            }   
-  
-        };   
-        window.onmouseup = function () {//鼠标抬起事件————用于清除鼠标移动事件，   
-            body.style.cursor = 'url("2.jpg"),auto';   
-            window.onmousemove = null;   
         }   
+
+    };   
+    wrapper.onmouseup = function () {//鼠标抬起事件————用于清除鼠标移动事件，   
+        wrapper.style.cursor = 'url("2.jpg"),auto';   
+        wrapper.onmousemove = null;   
     }   
+  }
+  //展开。合起立方体
+  function toggleCube(){
+  	var translateZ=isOpen?'translateZ(1rem)':'translateZ(2rem)'
+  	isOpen=!isOpen
+  	sidesArr.forEach((side,i)=>{
+  		side.style.transform=degArr[i]+translateZ
+  	})
+  }
+  function makeCube(){
+  	var translateZ=isMake?'translateZ(0rem)':'translateZ(1rem)'
+  	isMake=!isMake
+  	sidesArr.forEach((side,i)=>{
+  		setTimeout(function(){
+  			if (isMake) {
+	  			side.style.transform=''
+	  		}else{
+	  			side.style.transform=translateZ
+	  		}
+  		},i*3000)
+  		
+  	})
+  }
 </script>
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>cube</title>
+	<style>   
+ body{cursor: url("img/openhand1.png"),auto;}   
+     .big_box{   
+            width: 500px;   
+            height: 500px;   
+            margin: 200px auto;   
+        }   
+  
+        .box{   
+            -webkit-transform-style: preserve-3d;   
+            -moz-transform-style: preserve-3d;   
+            -ms-transform-style: preserve-3d;   
+            transform-style: preserve-3d;   
+            transform-origin:100px 100px 00px;   
+            position: relative;   
+            transform: rotatex(0deg) rotatey(0deg) rotatez(0deg)scale3d(0.7,0.7,0.7);   
+        }   
+        .box span{   
+            transition: all 1s linear;   
+  
+        }   
+        span{   
+            display: block;   
+            position: absolute;   
+            width: 200px;   
+            height: 200px;   
+            box-sizing: border-box;   
+            border:1px solid #999;   
+            /*opacity: 0.7;*/  
+            text-align: center;   
+            line-height: 200px;   
+            font-size: 60px;   
+            font-weight: 700;   
+            border-radius: 12%;   
+  
+        }   
+        .box span:nth-child(1){   
+            background-color: deepskyblue;   
+            transform-origin: left;   
+            transform: rotatey(-90deg) translatex(-100px);//左   
+        }   
+        .box span:nth-child(2){   
+            background-color: red;   
+            transform-origin: rightright;   
+            transform: rotatey(90deg) translatex(100px) ;//右   
+  
+        }   
+  
+        .box span:nth-child(3){   
+            background-color: green;   
+            transform-origin: top;   
+            transform: rotatex(90deg) translatey(-100px) ;//上   
+  
+        }   
+        .box span:nth-child(4){   
+            background-color: #6633FF;   
+            transform-origin: bottombottom;   
+            transform: rotatex(-90deg) translatey(100px);//下   
+        }   
+        .box span:nth-child(5){   
+            background-color: gold;   
+            transform: translatez(-100px);//后   
+        }   
+        .box span:nth-child(6){   
+  
+            background-color: #122b40;   
+            transform: translatez(100px);//前   
+        }   
+        .box:hover span{   
+  
+            opacity: 0.3;   
+        }   
+        .box:hover{   
+            animation-play-state:paused;//设置动画暂停   
+        }   
+</style>    
+</head>
+<body>
+	<input type="button" class="open" value="点击散开"/>  
+  <input type="text" class="xNum" value="0"/>//X轴旋转角度   
+  <input type="text" class="yNum" value="0"/>//Y轴旋转角度   
+  <input type="text" class="zNum"/>  
+  <div class="big_box">  
+      <div class="box">  
+          <span>1</span>  
+          <span>2</span>  
+          <span>3</span>  
+          <span>4</span>  
+          <span>5</span>  
+          <span>6</span>  
+      </div>  
+  </div> 
+</body>
+<script>   
+    move();   
+  
+    clickBox();   
+  
+    //鼠标按下且移动时触发，   
+  
+    function move(){   
+        var body = document.querySelector("body");   
+        var box = document.querySelector(".box");   
+        var xNum =document.querySelector(".xNum");   
+        var yNum =document.querySelector(".yNum");   
+        var x = 0,y = 0,z = 0;   
+        var xx = 0,yy = 0;   
+        var xArr = [],yArr = [];   
+        window.onmousedown = function (e) {//鼠标按下事件   
+            body.style.cursor = 'url("img/closedhand1.png"),auto';   
+            xArr[0] = e.clientX/2;//获取鼠标点击屏幕时的坐标   
+            yArr[0] = e.clientY/2;   
+            window.onmousemove = function (e) {//鼠标移动事件————当鼠标按下且移动时触发   
+                xArr[1] = e.clientX/2;//获取鼠标移动时第一个点的坐标   
+                yArr[1] = e.clientY/2;   
+                yy += xArr[1] - xArr[0];//获得鼠标移动的距离   
+                xx += yArr[1] - yArr[0];   
+                xNum.value = xx+"°";//将所获得距离数字赋值给input显示旋转角度   
+                yNum.value = yy+"°";   
+                //将旋转角度写入transform中   
+                box.style.transform = "rotatex("+xx+"deg) rotatey("+yy+"deg) rotatez(0deg)scale3d(0.7,0.7,0.7)";   
+                xArr[0] = e.clientX/2;   
+                yArr[0] = e.clientY/2;   
+            }   
+  
+        };   
+        window.onmouseup = function () {//鼠标抬起事件————用于清除鼠标移动事件，   
+            body.style.cursor = 'url("img/openhand1.png"),auto';   
+            window.onmousemove = null;   
+        }   
+    }   
+    //点击事件、负责立方体盒子的六面伸展   
+    function clickBox(){   
+        var btn = document.querySelector(".open");   
+        var box = document.querySelector(".box");   
+        var son = box.children;   
+        var value = 0;   
+        //存储立方体散开时的transform参数   
+        var arr0 = ["rotatey(-90deg) translatex(-100px)","rotatey(90deg) translatex(100px)","rotatex(90deg) translatey(-100px)","rotatex(-90deg) translatey(100px)","translatez(-100px)","translatez(100px)"];   
+        //存储立方体合并时的transform参数   
+        var arr1 = ["rotatey(-90deg) translatex(-100px)translatez(100px)","rotatey(90deg) translatex(100px)translatez(100px)","rotatex(90deg) translatey(-100px)translatez(100px)","rotatex(-90deg) translatey(100px)translatez(100px)","translatez(-200px)","translatez(200px)"];   
+        btn.onclick = function(){   
+            if(value == 0){   
+                value = 1;   
+                btn.value = "点击合并";   
+                for(var i=0;i<arr1.length;i++){   
+                    son[i].style.transform = arr1[i];   
+                    console.log(son[i])   
+                }   
+            }else if(value == 1){   
+                value = 0;   
+                btn.value = "点击散开";   
+                for(var j=0;j<arr0.length;j++){   
+                    son[j].style.transform = arr0[j];   
+                    console.log(j);   
+  
+                }   
+            }   
+        };   
+    }   
+</script>    
+</html>
