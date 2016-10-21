@@ -15,6 +15,7 @@
 			height: 100%;
 			display: flex;
 			flex-direction: column;
+
 		}
 		.wrapper{
 			background-color: #222;
@@ -82,9 +83,10 @@
 <body>
 <div class="ctrl">
 	父元素perspective：<input onchange="changePerspective(this)" type="range" id="ctrlBar" value="10000" min="0" max="10000" >
-	<output id="result" for="ctrlBar">10000</output>px
+	<output id="result" >10000</output>px
 	透明度：<input onchange="changeOpacity(this)" type="range" id="ctrlBar" value="1" min="0" step="0.05" max="1" >
-	<output id="result2" for="ctrlBar">1</output><br>
+	<output id="result2" >1</output>
+	<br>
 	X轴旋转角度  <input type="text" class="xNum" value="0"/> 
   Y轴旋转角度 <input type="text" class="yNum" value="0"/>
   <button onclick="makeCube()">3D原理演示</button>
@@ -163,30 +165,20 @@
       </div>
   </div>
 </div>
-<a class="about" href="https://github.com/secreter/3d_boson">by So ,github地址</a>
+<a class="about" href="https://github.com/secreter/3d_boson">by So ,附上源码github，请在chrome中查看</a>
 </body>
 
 <script type="text/javascript">
 	var cube=document.getElementById('mycube')
+	var wrapper = document.querySelector(".wrapper");
 	var result=document.getElementById('result')
 	var result2=document.getElementById('result2')
 	var degArr=['','rotateY(-180deg)','rotateY(90deg)','rotateY(-90deg)','rotateX(90deg)','rotateX(-90deg)']
-  var sidesArr=document.querySelectorAll('.side')
+  var sidesArr=document.querySelectorAll('.side')  //得到的是NodeList
 	var isOpen=false
 	var isMake=true
 	var isHide=false
-	// NodeList.prototype.forEach=function(callback){
-	// 	console.log(NodeList.prototype.forEach)
-	// 	// if (NodeList.prototype.forEach) {
-	// 	// 	this.forEach(callback)
-	// 	// }else{
-	// 	// 	for(var i=0;i<this.length;i++){
-	// 	// 		callback.call(this,this[i],i,this)
-	// 	// 	}
-	// 	// }
-	// }
 	
-  console.log(sidesArr.forEach(function(){console.log(1)}))
 	move()
 	function changePerspective(bar){
 		var val=bar.value
@@ -195,7 +187,6 @@
 		console.log(val)
 	}
 	function changeOpacity(bar){
-		
 		sidesArr.forEach((side)=>{
 			side.style.opacity=bar.value
 		})
@@ -209,7 +200,7 @@
 		})
 	}
   function move(){   
-    var wrapper = document.querySelector(".wrapper");   
+      
     var box = document.querySelector(".cube");   
     var xNum =document.querySelector(".xNum");   
     var yNum =document.querySelector(".yNum");   
