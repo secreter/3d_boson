@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>css 3D色子动画演示</title>
+	<link rel="stylesheet" type="text/css" href="css/boson.css">
+	<script type="text/javascript" src="js/util.js"></script>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding:0;
+		}
+		html,body{
+			font-size: 80px;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		.wrapper{
+			background-color: #222;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.cube{
+			width: 2rem;
+			height: 2rem;
+			background-color: #eee;
+			position: relative;
+			transform-style: preserve-3d;
+			transform: rotateX(-40deg) rotateY(32deg);
+			perspective: 10000px;
+		}
+		.side{
+			position: absolute;
+			top:0;
+			left: 0;
+			width: 2rem;
+			height: 2rem;
+			background-color: rgba(255, 99, 71, 0);
+			transition: 2s all ease;
+		}
+		.front {
+		  transform: translateZ(1rem);
+		}
+		.top {
+		  transform: rotateX(90deg) translateZ(1rem);
+		}
+		.right {
+    	transform: rotateY(90deg) translateZ(1rem);
+		}
+		.left {
+    	transform: rotateY(-90deg) translateZ(1rem);
+		}
+		.bottom {
+		  transform: rotateX(-90deg) translateZ(1rem);
+		}
+
+		.back {
+		  transform: rotateY(-180deg) translateZ(1rem);
+		}
+
+		.ctrl{
+			width: 100%;
+			padding: 20px 20px;
+			font-size: 16px;
+			background-color: #999;
+		}
+		.about{
+			display: inline-block;
+			width: 100%;
+			text-align: center;
+			position: absolute;
+			bottom: 10px;
+			font-size: 16px;
+			color: #f8f8f8;
+		}
+	</style>
+</head>
+<body>
+<div class="ctrl">
+	父元素perspective：<input onchange="changePerspective(this)" type="range" id="ctrlBar" value="10000" min="0" max="10000" >
+	<output id="result" for="ctrlBar">10000</output>px
+	透明度：<input onchange="changeOpacity(this)" type="range" id="ctrlBar" value="1" min="0" step="0.05" max="1" >
+	<output id="result2" for="ctrlBar">1</output><br>
+	X轴旋转角度  <input type="text" class="xNum" value="0"/> 
+  Y轴旋转角度 <input type="text" class="yNum" value="0"/>
+  <button onclick="makeCube()">3D原理演示</button>
+  <button onclick="toggleCube()">展开/合起</button>
+  <button onclick="translateCube()">只平移不旋转</button>
+  <button onclick="hideBackface()">隐藏/显示背面</button>
+  <button onclick="random()">掷筛子</button>
+</div>
+<div class="wrapper w2">
+  <div class="cube" id="mycube">
+  正面
+      <div class="side  front">
+      <!-- 1 -->
+      	<div class="first_face">
+					<span class="pip"></span>
+				</div>
+      </div>
+      <div class="side   back">
+      <!-- 6 -->
+      	<div class="sixth_face">
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side  right">
+      <!-- 4 -->
+      	<div class="forth_face">
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+					<div class="column">
+						<span class="pip"></span>
+						<span class="pip"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side   left">
+      <!-- 3 -->
+      	<div class="third_face">
+					<span class="pip flex_start"></span>
+					<span class="pip"></span>
+					<span class="pip flex_end"></span>
+				</div>
+      </div>
+      <div class="side    top">
+      <!-- 5 -->
+      	<div class="fifth_face">
+					<div class="column">
+						<span class="pip flex_end"></span>
+						<span class="pip flex_end"></span>
+					</div>
+					<div class="column">
+						<span class="pip center"></span>
+					</div>
+					<div class="column">
+						<span class="pip flex_start"></span>
+						<span class="pip flex_start"></span>
+					</div>
+				</div>
+      </div>
+      <div class="side bottom">
+      <!-- 2 -->
+      	<div class="second_face">
+					<span class="pip flex_start"></span>
+					<span class="pip flex_end"></span>
+				</div>
+      </div>
+  </div>
+</div>
+<a class="about" href="https://github.com/secreter/3d_boson">by So ,github地址</a>
+</body>
+
+<script type="text/javascript">
+	var cube=document.getElementById('mycube')
+	var result=document.getElementById('result')
+	var result2=document.getElementById('result2')
+	var degArr=['','rotateY(-180deg)','rotateY(90deg)','rotateY(-90deg)','rotateX(90deg)','rotateX(-90deg)']
+  var sidesArr=document.querySelectorAll('.side')
+	var isOpen=false
+	var isMake=true
+	var isHide=false
+	// NodeList.prototype.forEach=function(callback){
+	// 	console.log(NodeList.prototype.forEach)
+	// 	// if (NodeList.prototype.forEach) {
+	// 	// 	this.forEach(callback)
+	// 	// }else{
+	// 	// 	for(var i=0;i<this.length;i++){
+	// 	// 		callback.call(this,this[i],i,this)
+	// 	// 	}
+	// 	// }
+	// }
+	
+  console.log(sidesArr.forEach(function(){console.log(1)}))
+	move()
+	function changePerspective(bar){
+		var val=bar.value
+		cube.style.perspective=val+'px'
+		result.value=val
+		console.log(val)
+	}
+	function changeOpacity(bar){
+		
+		sidesArr.forEach((side)=>{
+			side.style.opacity=bar.value
+		})
+		result2.value=bar.value
+	}
+	function hideBackface(){
+		var visibility=isHide?'hidden':'visible'
+		isHide=!isHide
+		sidesArr.forEach((side)=>{
+			side.style.backfaceVisibility=visibility
+		})
+	}
+  function move(){   
+    var wrapper = document.querySelector(".wrapper");   
+    var box = document.querySelector(".cube");   
+    var xNum =document.querySelector(".xNum");   
+    var yNum =document.querySelector(".yNum");   
+    var x = 0,y = 0,z = 0;   
+    var xx = 0,yy = 0;   
+    var xArr = [],yArr = [];   
+    wrapper.onmousedown = function (e) {//鼠标按下事件   
+        wrapper.style.cursor = 'url("2.jpg"),auto';   
+        xArr[0] = e.clientX/2;//获取鼠标点击屏幕时的坐标   
+        yArr[0] = e.clientY/2;   
+        wrapper.onmousemove = function (e) {//鼠标移动事件————当鼠标按下且移动时触发   
+          xArr[1] = e.clientX/2;//获取鼠标移动时第一个点的坐标   
+          yArr[1] = e.clientY/2;   
+          yy += xArr[1] - xArr[0];//获得鼠标移动的距离   
+          xx += yArr[1] - yArr[0];   
+          xNum.value = xx+"°";//将所获得距离数字赋值给input显示旋转角度   
+          yNum.value = yy+"°";   
+          //将旋转角度写入transform中   
+          box.style.transform = "rotatex("+xx+"deg) rotatey("+yy+"deg) rotatez(0deg)scale3d(1,1,1)";   
+          xArr[0] = e.clientX/2;   
+          yArr[0] = e.clientY/2;   
+        }   
+    };   
+    wrapper.onmouseup = function () {//鼠标抬起事件————用于清除鼠标移动事件，   
+      wrapper.style.cursor = 'url("2.jpg"),auto';   
+      wrapper.onmousemove = null;   
+    }   
+  }
+  //展开、合起立方体
+  function toggleCube(){
+  	var translateZ=isOpen?'translateZ(1rem)':'translateZ(2rem)'
+  	isOpen=!isOpen
+  	sidesArr.forEach((side,i)=>{
+  		side.style.transform=degArr[i]+translateZ
+  	})
+  }
+  function makeCube(){
+  	var translateZ=isMake?'translateZ(0rem)':'translateZ(1rem)'
+  	isMake=!isMake
+  	sidesArr.forEach((side,i)=>{
+  		setTimeout(function(){
+  			if (isMake) {
+	  			side.style.transform=''
+	  		}else{
+	  			side.style.transform=translateZ
+	  		}
+  		},i*3000)
+  	})
+  }
+  function translateCube(){
+  	var translateZ=isMake?'translateZ(0rem)':'translateZ(1rem)'
+  	isMake=!isMake
+  	sidesArr.forEach((side,i)=>{
+  		setTimeout(function(){
+  			if (isMake) {
+	  			side.style.transform=''
+	  		}else{
+	  			side.style.transform=degArr[i]+' '+translateZ
+	  		}
+  		},i*3000)
+  	})
+  }
+
+  function random(){
+  	cube.style.transition="2s all ease-in-out"
+  	cube.style.transform = "rotatex("+getRandom(7000,14000)+"deg) rotatey("+getRandom(7000,14000)+"deg) rotatez("+getRandom(7000,14000)+"deg)scale3d(1,1,1)"
+  	setTimeout(()=>{
+  		cube.style.transition="none"
+  	},2000)
+  }
+  function getRandom(min,max){
+  	var num=Math.floor(Math.random()*(max-min)+min)
+  	return num-num%90+5
+  }
+</script>
+</html>
