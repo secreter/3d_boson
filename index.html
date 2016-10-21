@@ -24,6 +24,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			perspective: 10000px;
 		}
 		.cube{
 			width: 2rem;
@@ -32,7 +33,7 @@
 			position: relative;
 			transform-style: preserve-3d;
 			transform: rotateX(-40deg) rotateY(32deg);
-			perspective: 10000px;
+			
 		}
 		.side{
 			position: absolute;
@@ -84,8 +85,12 @@
 <div class="ctrl">
 	父元素perspective：<input onchange="changePerspective(this)" type="range" id="ctrlBar" value="10000" min="0" max="10000" >
 	<output id="result" >10000</output>px
-	透明度：<input onchange="changeOpacity(this)" type="range" id="ctrlBar" value="1" min="0" step="0.05" max="1" >
+	透明度：<input onchange="changeOpacity(this)" type="range"  value="1" min="0" step="0.05" max="1" >
 	<output id="result2" >1</output>
+	PerspectiveOriginX<input onchange="changePerspectiveOriginX(this)" type="range"  value="50" min="0" max="100" >
+	<output id="result3" >50</output>
+	PerspectiveOriginY<input onchange="changePerspectiveOriginY(this)" type="range"  value="50" min="0" max="100" >
+	<output id="result4" >50</output>
 	<br>
 	X轴旋转角度  <input type="text" class="xNum" value="0"/> 
   Y轴旋转角度 <input type="text" class="yNum" value="0"/>
@@ -173,11 +178,15 @@
 	var wrapper = document.querySelector(".wrapper");
 	var result=document.getElementById('result')
 	var result2=document.getElementById('result2')
+	var result3=document.getElementById('result3')
+	var result4=document.getElementById('result4')
 	var degArr=['','rotateY(-180deg)','rotateY(90deg)','rotateY(-90deg)','rotateX(90deg)','rotateX(-90deg)']
   var sidesArr=document.querySelectorAll('.side')  //得到的是NodeList
 	var isOpen=false
 	var isMake=true
 	var isHide=false
+	var perspectiveOriginX=50
+	var perspectiveOriginY=50
 	
 	move()
 	function changePerspective(bar){
@@ -191,6 +200,20 @@
 			side.style.opacity=bar.value
 		})
 		result2.value=bar.value
+	}
+	function changePerspectiveOriginX(bar){
+		perspectiveOriginX=bar.value
+		result3.value=bar.value
+		changePerspectiveOrigin()
+	}
+	function changePerspectiveOriginY(bar){
+		perspectiveOriginY=bar.value
+		result4.value=bar.value
+		changePerspectiveOrigin()
+	}
+	function changePerspectiveOrigin(){
+		wrapper.style.perspectiveOrigin=perspectiveOriginX+'% '+perspectiveOriginY+'%'
+		
 	}
 	function hideBackface(){
 		var visibility=isHide?'hidden':'visible'
