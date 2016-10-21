@@ -88,9 +88,9 @@
 	透明度：<input onchange="changeOpacity(this)" type="range"  value="1" min="0" step="0.05" max="1" >
 	<output id="result2" >1</output>
 	PerspectiveOriginX<input onchange="changePerspectiveOriginX(this)" type="range"  value="50" min="0" max="100" >
-	<output id="result3" >50</output>
+	<output id="result3" >50%</output>
 	PerspectiveOriginY<input onchange="changePerspectiveOriginY(this)" type="range"  value="50" min="0" max="100" >
-	<output id="result4" >50</output>
+	<output id="result4" >50%</output>
 	<br>
 	X轴旋转角度  <input type="text" class="xNum" value="0"/> 
   Y轴旋转角度 <input type="text" class="yNum" value="0"/>
@@ -98,7 +98,7 @@
   <button onclick="toggleCube()">展开/合起</button>
   <button onclick="translateCube()">只平移不旋转</button>
   <button onclick="hideBackface()">隐藏/显示背面</button>
-  <button onclick="random()">掷筛子</button>
+  <button onclick="random()">掷色子</button>
 </div>
 <div class="wrapper w2">
   <div class="cube" id="mycube">
@@ -203,12 +203,12 @@
 	}
 	function changePerspectiveOriginX(bar){
 		perspectiveOriginX=bar.value
-		result3.value=bar.value
+		result3.value=bar.value+'%'
 		changePerspectiveOrigin()
 	}
 	function changePerspectiveOriginY(bar){
 		perspectiveOriginY=bar.value
-		result4.value=bar.value
+		result4.value=bar.value+'%'
 		changePerspectiveOrigin()
 	}
 	function changePerspectiveOrigin(){
